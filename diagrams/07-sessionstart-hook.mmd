@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant H as SessionStart hook
+    participant FS as Filesystem
+    Note over H: matcher: startup OR clear
+    H->>FS: rm -f .claude/workspace/project_plan.md
+    H->>FS: rm -f .claude/project_plan.md
+    H->>FS: rm -f .claude/workspace/loop_state.json
+    Note over H: deliberately NOT fired on resume / compact<br/>(those preserve in-flight pipeline state)

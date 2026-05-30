@@ -1,0 +1,8 @@
+# Claude Code local settings (user-specific overrides)
+.claude/settings.local.json
+
+# Pipeline telemetry (queryable mirror of routing_observations.md; grows unbounded)
+.claude/orchestrator_telemetry.jsonl
+
+# Ephemeral pipeline workspace (loop_state.json, in-flight project_plan.md, etc.)
+.claude/workspace/

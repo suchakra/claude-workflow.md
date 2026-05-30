@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -f \"$CLAUDE_PROJECT_DIR/.claude/workspace/project_plan.md\" \"$CLAUDE_PROJECT_DIR/.claude/project_plan.md\" \"$CLAUDE_PROJECT_DIR/.claude/workspace/loop_state.json\""
+          }
+        ]
+      },
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -f \"$CLAUDE_PROJECT_DIR/.claude/workspace/project_plan.md\" \"$CLAUDE_PROJECT_DIR/.claude/project_plan.md\" \"$CLAUDE_PROJECT_DIR/.claude/workspace/loop_state.json\""
+          }
+        ]
+      }
+    ]
+  }
+}

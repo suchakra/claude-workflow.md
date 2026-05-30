@@ -1,0 +1,22 @@
+flowchart LR
+    U([User]) --> O{Orchestrator<br/>opus 4.7}
+    O -- Tier 1: trivial --> A1[Direct edit]
+    O -- Tier 1: with logic --> EX1["@executor<br/>sonnet"]
+    O -- Tier 2: 1-3 inline Qs --> U
+    O -- Tier 3: full pipeline --> ID["@idea<br/>haiku"]
+    ID --> GR["@groomer<br/>sonnet"]
+    GR -- groomed --> EX2["@executor<br/>sonnet"]
+    GR -- reject --> AR["@architect<br/>opus"]
+    AR -- refined --> EX2
+    AR -- bounce --> ID
+    EX1 --> RV1["@reviewer<br/>opus"]
+    EX2 --> RV2["@reviewer<br/>opus"]
+    RV1 -- approved --> U
+    RV2 -- approved --> U
+    RV1 -- changes --> EX1
+    RV2 -- changes --> EX2
+
+    classDef tier1 fill:#cfe,stroke:#080;
+    classDef tier3 fill:#fcf,stroke:#808;
+    class A1,EX1,RV1 tier1;
+    class ID,GR,AR,EX2,RV2 tier3;

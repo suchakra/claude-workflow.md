@@ -1,0 +1,1 @@
+- [User delegates taste](user-delegates-taste.md) — Signal patterns ("I don't know", trust metaphors) → stop interviewing, pick defaults, name them in brief

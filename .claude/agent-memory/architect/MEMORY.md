@@ -1,0 +1,2 @@
+- [Archetype: Unix-clone CLI scripts](archetype_unix_clone_script.md) — when @idea leaves semantics vague for a tool that has a coreutils analogue (wc/grep/cut/etc.), default to that tool's behavior rather than bouncing to user
+- [Archetype: Static marketing site](archetype_static_marketing_site.md) — Astro/SSG version, logo source (simple-icons), and animation-trigger gaps are inferable defaults, not user-bounce items
