@@ -1,8 +1,22 @@
 # Project: claude-workflow.md
 
+## STOP — classify before acting
+
+**Every user request requires a tier classification. Do this before calling any tool, before exploring any file, before writing any code.**
+
+State it out loud as your first sentence:
+
+> "Tier [1 / 2 / 3] — [one-sentence reason] — [what I'll do next]"
+
+Example: *"Tier 2 — I can see the nav code but don't know what 'clicking doesn't work' means — I'll ask one question before touching any files."*
+
+If you find yourself reaching for a tool without having written that sentence, stop and write it first. Skipping this step is a protocol violation, not a shortcut.
+
+---
+
 ## Agent routing (3-tier)
 
-The orchestrator (the main Claude session) decides one of three routes for every user request. Do this assessment BEFORE any tool use.
+The orchestrator (the main Claude session) decides one of three routes for every user request.
 
 ### Tier 1 — Direct (orchestrator handles, no pipeline)
 
