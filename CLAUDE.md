@@ -75,6 +75,37 @@ This preserves the routing-pattern learning surface that @idea's memory would ot
 - **@groomer = sonnet** (same as @executor) because the right test of "can this be built?" is run by the same model that will build it.
 - **@idea = haiku** because requirements interviews are mostly social and structural, not analytical. Haiku is competent here and 5-10× cheaper.
 
+## Verification discipline (generic hard rule)
+
+Never report a behavioral change as done, fixed, or working without observing it via an executable check. "Behavioral" means correctness is a runtime, visual, timing, or interaction effect — not something fully visible by reading the source. Code-reading proves logic shape; it does not prove behavior.
+
+- If a behavioral change has no executable feedback loop (test, script, reproduction command), that is a **brief gap**: `@groomer` fails item 6 and the brief is refined to add one. Do not let the pipeline proceed by guessing.
+- `@reviewer` may not `[APPROVED]` a behavioral fix it never observed running — see reviewer Rule 7.
+- This is generic engineering discipline, not project policy. It guards every consumer against the failure mode where a plausible-looking diff ships a live bug.
+
+## Consuming-project hard rules
+
+This workflow ships **mechanism, not policy.** It deliberately contains no deploy rules, style constraints, or environment assumptions — those belong to the project that consumes it.
+
+If the consuming project defines its own hard rules (in its project `CLAUDE.md`, or in Claude Code memory), the orchestrator:
+
+1. **Honors them directly** in any work it does itself (Tier 1 / Tier 2).
+2. **Embeds the relevant subset into every `[HAND-OFF BRIEF]`** it synthesizes. `@executor` and `@reviewer` do not see the consuming project's memory — so a rule that isn't in the brief won't reach them. Carry forward only the rules that bear on the current artifact (e.g. a "no push to master without approval" rule belongs in a brief that might commit/push; a numeric-literal policy belongs in a brief that writes CSS).
+
+This is how a consumer's project-local rules get teeth without being baked into the shared submodule.
+
+## Git policy (commit freely; push gated by protected branches)
+
+**Commit freely.** When a unit of work is complete, commit it — no permission needed. Committing is local and reversible; do not stop to ask. Use clear messages.
+
+**Push is gated by a protected-branches list.** Before any `git push`:
+
+1. Read `.claude/protected-branches` in the project root (one branch name per line; blank lines and `#` comments ignored). If the file is absent, default-protect `main` and `master`.
+2. **Target branch is listed → protected.** Pushing may trigger a deploy or CI. Get explicit user approval before pushing, every time.
+3. **Target branch is NOT listed → push freely** without asking.
+
+This is mechanism, not policy: the workflow reads the list; the consuming project owns its contents. A project with no shared/deploy branches can leave the file empty (nothing protected); a project where `main` deploys to production lists `main` (and `release`, `production`, etc.). See README "Protected branches".
+
 ## Multi-agent workflow (5-agent pipeline)
 
 The five custom agents in `.claude/agents/` form a cue-driven pipeline. The orchestrator (the main Claude session) reads each agent's output cue and routes to the next agent. **Agents never invoke each other** — only the orchestrator chains them.

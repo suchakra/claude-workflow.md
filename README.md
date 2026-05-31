@@ -84,6 +84,7 @@ git submodule update --remote .claude/workflow
 - **Tiered cost** — haiku for interviews, sonnet for building/auditing, opus only where reasoning depth matters (architecture, review). Tier 1 skips the pipeline entirely.
 - **Accumulating memory** — each agent has its own memory directory under `.claude/agent-memory/`. Findings from `@reviewer` feed back to `@groomer` via a shared file, so the pipeline improves across sessions.
 - **Hard limits** — refinement loop capped at 3 bounces, review loop at 3 cycles. State persisted to disk so limits survive context compaction.
+- **No blind sign-off** — a *behavioral* change (runtime, visual, timing, interaction) can't be marked done on code-reading alone. `@groomer` requires the brief to name an executable feedback loop; `@reviewer` refuses to approve a behavioral fix it never observed running. Code looking right is exactly how blind reviews rubber-stamp live bugs.
 
 ---
 
@@ -91,6 +92,65 @@ git submodule update --remote .claude/workflow
 
 - A general-purpose agent framework. This is Claude Code-specific: it uses `CLAUDE.md` loading, `.claude/agents/` discovery, and `settings.json` hooks. It does not port to other providers.
 - A product. It is a workflow you can adopt, fork, and fix. Bugs go back upstream via the submodule.
+
+---
+
+## Adding your own project rules
+
+This workflow ships **mechanism, not policy.** It has no opinion about your deploy
+process, your coding style, or your toolchain — those are yours.
+
+Put project-specific hard rules in **your own** project, not in the submodule:
+
+- Add them to your project's root `CLAUDE.md` (the same file that imports
+  `@.claude/workflow/CLAUDE.md`), or to your Claude Code memory.
+- **Do not edit files under `.claude/workflow/`.** That is the submodule — your
+  changes would be overwritten on `git submodule update --remote`, and they don't
+  belong to your project anyway.
+
+The orchestrator honors your rules directly and **embeds the relevant ones into each
+`[HAND-OFF BRIEF]`**, so the build/review agents (which never see your project
+memory) still obey them. Examples of rules a consumer might write:
+
+- *"Don't introduce numeric literals into CSS/HTML/JS without asking — assets get
+  swapped and baked-in numbers go stale."*
+- *"This project pins Node via Volta; prefix npm commands accordingly."*
+
+These are illustrations, not defaults — the submodule imposes none of them.
+(Git push policy is a first-class mechanism, not a free-text rule — see
+**Protected branches** below.)
+
+---
+
+## Protected branches
+
+The orchestrator **commits freely** (no permission needed — commits are local and
+reversible) but **asks before pushing to a protected branch**, because a push to a
+shared branch often triggers a deploy or CI run.
+
+Which branches are protected is configured by a plain-text file in **your** project:
+
+```
+.claude/protected-branches
+```
+
+One branch name per line; blank lines and `#` comments are ignored. List every branch
+that triggers a deploy or is otherwise protected:
+
+```
+# pushing to any of these requires explicit approval
+master
+main
+release
+production
+```
+
+- Push to a branch **in** the list → the orchestrator asks first.
+- Push to any branch **not** in the list → it pushes without asking.
+- **File absent →** `main` and `master` are protected by default (safe fallback).
+- No shared/deploy branches at all? Leave the file empty — nothing is gated.
+
+Keep this file in your own project, not in `.claude/workflow/`.
 
 ---
 

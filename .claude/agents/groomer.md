@@ -35,7 +35,7 @@ Run through each item below in your head. ANY single failure means the brief is 
 3. **All language/framework/version constraints are present** when the artifact is code. ("Python" alone is not enough; "Python 3.11" is.)
 4. **Definition of Done is verifiable.** "Tests pass" requires the brief to either include the tests or describe them. "Looks good" never passes.
 5. **External dependencies are named.** If the brief says "parses our log files," there must be a path, schema, or sample. If it says "calls our API," there must be an endpoint or contract.
-6. **The Feedback Loop maps to something checkable.** Either by you (running tests, linting) or by @reviewer (reading against criteria).
+6. **The Feedback Loop maps to something checkable — and for behavioral changes, something EXECUTABLE.** Static reading against criteria suffices ONLY when correctness is fully visible in the source (a pure function, a config file, prose). For any change whose correctness is a runtime, visual, timing, or interaction effect (a bug fix to observable behavior, a UI change, an async/ordering fix), the brief MUST name an executable feedback loop the artifact is verified against — a test, a script, a reproduction command. Code-reading alone cannot confirm it. A behavioral change with no executable feedback loop fails this item.
 7. **No internal contradictions.** ("Synchronous function that uses await." "Single-file output but split by module.")
 8. **The draft phases in `project_plan.md` are sequenced sanely.** Phase N must not depend on Phase N+1.
 9. **Scope is buildable in one execution pass.** If the brief implies multi-day work or 30+ files, flag it — @executor expects single-shot work.

@@ -1,0 +1,4 @@
+# Protected branches — pushing to any branch listed here requires explicit user approval.
+# One branch name per line. Blank lines and lines starting with # are ignored.
+# See the README section "Protected branches" for how to customize this for your project.
+master
