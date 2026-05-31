@@ -31,7 +31,7 @@ When the orchestrator has **≥90% confidence** it can act correctly without ask
 
 **Within Tier 1, decide the build path by expected artifact size:**
 
-- **Tiny / mechanical** (a single edit, <10 lines, rename, typo fix, config tweak, single-file mutation): orchestrator builds directly. No review needed — opus self-review on trivial code is diminishing returns.
+- **Tiny / mechanical** (a single edit, <10 lines, rename, typo fix, config tweak, single-file mutation): orchestrator builds directly. No review needed — sonnet self-review on trivial code is diminishing returns.
 - **Larger / has logic** (≥10 lines OR contains control flow OR generates a new file): hand off to `@executor` with a brief synthesized inline by the orchestrator. Two reasons, both load-bearing:
   1. **Cost.** Sonnet output is ~5× cheaper than opus output. Break-even on the spawn overhead is around 10-15 lines of code.
   2. **Quality.** Handoff triggers `@reviewer` via the `[ARTIFACT READY]` cue — opus catches bugs the writer might miss. Direct-build skips this safety net.

@@ -2,7 +2,7 @@
 
 This document explains how the orchestrator and the 5-agent pipeline cooperate. For the operational rules, see `CLAUDE.md`. For the rationale-and-critique knowledgebase, see `.claude/knowledgebase/agent_critique.md`.
 
-**Last-reviewed:** 2026-05-28 against `claude-opus-4-7`.
+**Last-reviewed:** 2026-05-31 against `claude-opus`.
 
 ---
 
@@ -10,7 +10,7 @@ This document explains how the orchestrator and the 5-agent pipeline cooperate. 
 
 ```mermaid
 flowchart LR
-    U([User]) --> O{Orchestrator<br/>opus 4.7}
+    U([User]) --> O{Orchestrator<br/>sonnet}
     O -- Tier 1: trivial --> A1[Direct edit]
     O -- Tier 1: with logic --> EX1["@executor<br/>sonnet"]
     O -- Tier 2: 1-3 inline Qs --> U
@@ -41,7 +41,7 @@ ASCII fallback:
                     └───────┬───────┘
                             │
                     ┌───────▼────────┐
-                    │  Orchestrator  │  (opus 4.7, the main session)
+                    │  Orchestrator  │  (sonnet, the main session)
                     │  3-tier router │
                     └───┬────┬────┬──┘
                 Tier 1  │    │    │  Tier 3
@@ -123,7 +123,7 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor U as User
-    participant O as Orchestrator (opus)
+    participant O as Orchestrator (sonnet)
     participant I as @idea (haiku)
     participant G as @groomer (sonnet)
     participant A as @architect (opus)
@@ -316,7 +316,7 @@ Why two matchers but identical commands: `startup` fires on fresh `claude` invoc
 | @architect | opus | Catching design-phase bugs is much cheaper than fixing them after the build. One opus pass < several executor re-runs. |
 | @executor | sonnet | Build cost. Sonnet output is ~5× cheaper than opus per token, and the brief constrains scope tightly enough that opus reasoning depth is overkill. |
 | @reviewer | opus | Review quality depends on (a) catching subtle bugs and (b) communicating them precisely. Opus depth + writing clarity are both load-bearing. |
-| orchestrator | opus 4.7 | Routes everything; needs strong judgment on tier classification and cue parsing. |
+| orchestrator | sonnet | Routes everything; needs strong judgment on tier classification and cue parsing. |
 
 ---
 
@@ -337,4 +337,4 @@ See `CLAUDE.md` sections **Known issues & workarounds** and **Deferred items** f
 3. **`.claude/knowledgebase/agent_critique.md`** — what's wrong with it and what would make it better.
 4. **`.claude/agents/*.md`** — the actual prompts, in order of pipeline appearance.
 
-<!-- last-reviewed: 2026-05-28 against claude-opus-4-7 -->
+<!-- last-reviewed: 2026-05-31 against claude-opus -->

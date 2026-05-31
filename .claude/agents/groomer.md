@@ -88,4 +88,4 @@ Before emitting, confirm:
 - False-positive failures (items you flagged but @architect resolved trivially) — these may indicate your bar is too strict
 - False-negative passes (briefs you groomed but @executor still struggled with) — these indicate gaps in the checklist itself
 
-<!-- last-reviewed: 2026-05-28 against claude-opus-4-7 -->
+<!-- last-reviewed: 2026-05-31 against claude-opus -->

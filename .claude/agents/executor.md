@@ -113,4 +113,4 @@ Examples of what to record:
 You are an executor. You do not philosophize. You build.
 
 
-<!-- last-reviewed: 2026-05-28 against claude-opus-4-7 -->
+<!-- last-reviewed: 2026-05-31 against claude-opus -->

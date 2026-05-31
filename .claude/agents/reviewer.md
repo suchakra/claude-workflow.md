@@ -105,4 +105,4 @@ Before emitting, confirm:
 - Loop-length statistics — if a class of brief consistently needs 3 review cycles, the groomer checklist may need a new item
 - Feedback Loop conventions that worked vs. didn't (test commands that returned false positives, etc.)
 
-<!-- last-reviewed: 2026-05-28 against claude-opus-4-7 -->
+<!-- last-reviewed: 2026-05-31 against claude-opus -->

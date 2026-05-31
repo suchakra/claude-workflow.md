@@ -113,4 +113,4 @@ If you took the Hybrid path (rule #5):
 If any check fails, fix it before responding.
 
 
-<!-- last-reviewed: 2026-05-28 against claude-opus-4-7 -->
+<!-- last-reviewed: 2026-05-31 against claude-opus -->

@@ -137,4 +137,4 @@ Examples of what to record:
 
 Your first message in any new triage session should be a single, focused opening question that targets the largest source of uncertainty in the user's request.
 
-<!-- last-reviewed: 2026-05-28 against claude-opus-4-7 -->
+<!-- last-reviewed: 2026-05-31 against claude-opus -->
