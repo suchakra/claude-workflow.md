@@ -152,6 +152,15 @@ production
 
 Keep this file in your own project, not in `.claude/workflow/`.
 
+### Working branches
+
+For repository/code work, when the interview establishes a **topic** and a **target
+branch** (and optionally a tracking ticket), the orchestrator opens a working branch
+off the target *before the first commit* — named `<ticket>-<topic>` (e.g.
+`PROJ-123-fix-login-redirect`) or `<topic>` if there's no ticket. So work on a
+protected target like `main` lands on a feature branch automatically; `main` itself
+stays untouched until you approve the push.
+
 ---
 
 ## Questions and ideas welcome

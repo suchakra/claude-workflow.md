@@ -96,13 +96,15 @@ This is how a consumer's project-local rules get teeth without being baked into 
 
 ## Git policy (commit freely; push gated by protected branches)
 
+**Branch off the target before starting.** When the interview (Tier 2 inline, or @idea's brief Source Control section at Tier 3) has established the **topic** and a **target branch** for repository/code work, create a working branch off the target branch BEFORE the first commit. Name it `<ticket>-<topic-slug>` when a tracking ticket exists (e.g. `PROJ-123-fix-login-redirect`), or `<topic-slug>` when none does. Branch off the up-to-date target (`git fetch` then branch from `origin/<target>` when a remote exists). This composes with protected branches below: you branch off a protected target like `main` but never commit to it directly — the feature branch carries the work. Skip this for non-repo artifacts and for trivial work already on an appropriate branch.
+
 **Commit freely.** When a unit of work is complete, commit it — no permission needed. Committing is local and reversible; do not stop to ask. Use clear messages.
 
 **Push is gated by a protected-branches list.** Before any `git push`:
 
-1. Read `.claude/protected-branches` in the project root (one branch name per line; blank lines and `#` comments ignored). If the file is absent, default-protect `main` and `master`.
-2. **Target branch is listed → protected.** Pushing may trigger a deploy or CI. Get explicit user approval before pushing, every time.
-3. **Target branch is NOT listed → push freely** without asking.
+1. Read `.claude/protected-branches` in the project root (one branch name per line; blank lines and `#` comments ignored). If the file is absent, default-protect `main` and `master`. Matching is by exact branch name, not substring — a feature branch like `PROJ-123-main-fix` does NOT match a protected entry `main`.
+2. **The branch you are pushing is listed → protected.** Pushing may trigger a deploy or CI. Get explicit user approval before pushing, every time. (This is the branch you push TO — usually the same as the current branch — not the integration "target branch" from the Source Control section above.)
+3. **The branch you are pushing is NOT listed → push freely** without asking. Working/feature branches (`<ticket>-<topic>`) are never listed, so pushes to them flow without friction; only the eventual push or merge into a protected integration branch needs approval.
 
 This is mechanism, not policy: the workflow reads the list; the consuming project owns its contents. A project with no shared/deploy branches can leave the file empty (nothing protected); a project where `main` deploys to production lists `main` (and `release`, `production`, etc.). See README "Protected branches".
 
