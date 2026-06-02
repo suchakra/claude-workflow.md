@@ -260,12 +260,6 @@ claude-workflow.md/
 ├── ARCHITECTURE.md                ← this file
 ├── CLAUDE.md                       ← operational rules (routing, cues, loops, hooks)
 └── .claude/
-    ├── agents/                     ← agent prompt files
-    │   ├── idea.md      (haiku)
-    │   ├── groomer.md   (sonnet)
-    │   ├── architect.md (opus)
-    │   ├── executor.md  (sonnet)
-    │   └── reviewer.md  (opus)
     ├── agents/                     ← agent prompt files (symlinked by init.sh)
     │   ├── idea.md      (haiku)
     │   ├── groomer.md   (sonnet)
