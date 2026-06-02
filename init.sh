@@ -21,7 +21,22 @@ for f in "$WORKFLOW/.claude/agents/"*.md; do
   fi
 done
 
-# 2. Add @import to CLAUDE.md
+# 2. Symlink commands into .claude/commands/
+mkdir -p .claude/commands
+for f in "$WORKFLOW/.claude/commands/"*.md; do
+  [ -e "$f" ] || continue  # skip if glob matched nothing
+  name=$(basename "$f")
+  target="../workflow/.claude/commands/$name"
+  link=".claude/commands/$name"
+  if [ -L "$link" ]; then
+    echo "  skip  $link (already linked)"
+  else
+    ln -sf "$target" "$link"
+    echo "  link  $link"
+  fi
+done
+
+# 3. Add @import to CLAUDE.md
 IMPORT="@.claude/workflow/CLAUDE.md"
 if [ ! -f CLAUDE.md ]; then
   echo "$IMPORT" > CLAUDE.md
@@ -33,7 +48,7 @@ else
   echo "  patch CLAUDE.md (prepended import)"
 fi
 
-# 3. Install or warn about settings.json
+# 4. Install or warn about settings.json
 if [ ! -f .claude/settings.json ]; then
   mkdir -p .claude
   cp "$WORKFLOW/settings-fragment.json" .claude/settings.json

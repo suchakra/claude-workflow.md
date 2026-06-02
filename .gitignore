@@ -7,5 +7,5 @@
 # Ephemeral pipeline workspace (loop_state.json, in-flight project_plan.md, etc.)
 .claude/workspace/
 
-# Local-only slash commands (project-specific, not for public sharing)
-.claude/commands/
+# gen-diagrams depends on a local mmdc path and is for repo authors only
+.claude/commands/gen-diagrams.md
