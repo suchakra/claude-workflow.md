@@ -68,7 +68,7 @@ bash .claude/workflow/init.sh
 # 3. Restart Claude Code — agents load on session start
 ```
 
-`init.sh` does three things: symlinks the five agents into `.claude/agents/`, prepends `@.claude/workflow/CLAUDE.md` to your `CLAUDE.md`, and installs the `SessionStart` hooks in `.claude/settings.json`.
+`init.sh` does four things: symlinks the five agents into `.claude/agents/`, symlinks the included slash commands (including `/calibrate`) into `.claude/commands/`, prepends `@.claude/workflow/CLAUDE.md` to your `CLAUDE.md`, and copies the `SessionStart` hooks into `.claude/settings.json` — or warns you to merge them manually if that file already exists.
 
 ### Staying current
 
@@ -85,6 +85,7 @@ git submodule update --remote .claude/workflow
 - **Accumulating memory** — each agent has its own memory directory under `.claude/agent-memory/`. Findings from `@reviewer` feed back to `@groomer` via a shared file, so the pipeline improves across sessions.
 - **Hard limits** — refinement loop capped at 3 bounces, review loop at 3 cycles. State persisted to disk so limits survive context compaction.
 - **No blind sign-off** — a *behavioral* change (runtime, visual, timing, interaction) can't be marked done on code-reading alone. `@groomer` requires the brief to name an executable feedback loop; `@reviewer` refuses to approve a behavioral fix it never observed running. Code looking right is exactly how blind reviews rubber-stamp live bugs.
+- **`/calibrate`** — a built-in slash command that reads the telemetry log and reports tier distribution, estimate accuracy, routing signal rate, and threshold recommendations. Run it periodically to check whether the orchestrator's routing judgements are drifting.
 
 ---
 

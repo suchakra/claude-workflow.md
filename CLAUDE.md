@@ -253,14 +253,13 @@ The shared findings file is the only place where one agent's output influences a
   - `build_path` was added beyond the original roadmap sketch — it is the markdown log's load-bearing column and must not be lost in the mirror.
   - `actual_lines` and `artifact_path` are `null` when not measured/recorded (e.g. a handoff whose artifact size wasn't captured). `questions` is `[]` for Tier 1. `anomalies` carries what the markdown `notes` column carried.
 - **Why JSONL:** line-atomic writes are safe under concurrent appends; `jq` makes queries cheap; tier-misclassification rate is one `jq` away from a calibration signal. Example: `jq -s '[.[] | select(.actual_lines != null)] | map(.actual_lines - .est_lines)' .claude/orchestrator_telemetry.jsonl` surfaces estimate drift.
-- **Markdown retention:** the human-readable log is **retained indefinitely and remains the primary, authoritative surface.** Deprecation is explicitly deferred — do NOT remove or stop writing the markdown log. Revisit only if/when a `/calibrate` skill exists and the team decides the JSONL fully subsumes it.
+- **Markdown retention:** the human-readable log is **retained indefinitely and remains the primary, authoritative surface.** Do NOT remove or stop writing the markdown log. Revisit deprecation only if/when the team decides the JSONL (queryable via `/calibrate`) fully subsumes it.
 
 ## Deferred items (from 2026-05-28 critique)
 
 Documented for future-you. These are known gaps NOT fixed in the May-28 pass:
 
 1. **Pipeline test harness.** No `.claude/tests/` scenarios yet. Manual smoke testing only. When added: cover (a) vague request → Tier 3, (b) specific small → Tier 1 direct, (c) mid-ambiguity → Tier 2 inline.
-2. **`/calibrate` skill.** Should consume the telemetry file and print tier-misclassification rate; recommend threshold adjustments when rate > 20%.
-3. **`@editor` agent.** `@reviewer` is calibrated for code correctness; prose review needs a different reviewer. Currently the orchestrator writes prose directly using opus.
-4. **Splitting `description:` from examples.** Verify whether the harness injects agent `description:` into the child agent's context; if not, examples can move to a sibling `.examples.md` file and shrink invocation prompts.
-5. **Pre-spawn agent-hash check.** Warn the user when `.claude/agents/<name>.md` was edited mid-session (cached prompt is stale until restart per known-issue #2).
+2. **`@editor` agent.** `@reviewer` is calibrated for code correctness; prose review needs a different reviewer. Currently the orchestrator writes prose directly.
+3. **Splitting `description:` from examples.** Verify whether the harness injects agent `description:` into the child agent's context; if not, examples can move to a sibling `.examples.md` file and shrink invocation prompts.
+4. **Pre-spawn agent-hash check.** Warn the user when `.claude/agents/<name>.md` was edited mid-session (cached prompt is stale until restart per known-issue #2).

@@ -105,15 +105,15 @@ flowchart TD
     T3 --> Pipeline[5-agent pipeline]
 ```
 
-**Why three tiers?** Cost asymmetry. Opus is expensive, sonnet is mid, haiku is cheap. A request the orchestrator (opus) can answer alone shouldn't spawn anyone. A trivial edit doesn't need a sonnet review. A genuinely ambiguous request needs a structured interview, which haiku is competent for and cheap at. The tiers route work to the cheapest competent tier.
+**Why three tiers?** Cost asymmetry. Opus is expensive, sonnet is mid, haiku is cheap. A request the orchestrator can answer alone shouldn't spawn anyone. A trivial edit doesn't need a review pass. A genuinely ambiguous request needs a structured interview, which haiku is competent for and cheap at. The tiers route work to the cheapest competent tier.
 
 | Tier | Confidence | Cost profile | What runs |
 |---|---|---|---|
-| 1 (direct) | ≥ 90% | One opus turn (if mechanical) or 1 opus + 1 sonnet handoff + 1 opus review (if ≥ 10 lines) | orchestrator alone, OR orchestrator + @executor + @reviewer |
+| 1 (direct) | ≥ 90% | 1 orchestrator turn (if mechanical) or 1 orchestrator + @executor handoff + @reviewer pass (if ≥ 10 lines) | orchestrator alone, OR orchestrator + @executor + @reviewer |
 | 2 (inline triage) | 75-89% | Same as Tier 1 plus 1-3 conversational turns | orchestrator + user dialogue, then Tier 1's two paths |
 | 3 (full pipeline) | < 75% | ≥ 5 agent spawns (haiku + sonnet + opus + sonnet + opus) | the full pipeline below |
 
-**Tier 1's "Tiny vs Larger" split** is itself a sub-router: tiny work stays on opus (faster end-to-end); larger work hands off to sonnet for the build and opus for the review (cheaper per token + catches bugs).
+**Tier 1's "Tiny vs Larger" split** is itself a sub-router: tiny work stays with the orchestrator (faster end-to-end); larger work hands off to @executor for the build and @reviewer for the review (quality gate + catches bugs).
 
 ---
 
@@ -266,22 +266,31 @@ claude-workflow.md/
     │   ├── architect.md (opus)
     │   ├── executor.md  (sonnet)
     │   └── reviewer.md  (opus)
+    ├── agents/                     ← agent prompt files (symlinked by init.sh)
+    │   ├── idea.md      (haiku)
+    │   ├── groomer.md   (sonnet)
+    │   ├── architect.md (opus)
+    │   ├── executor.md  (sonnet)
+    │   └── reviewer.md  (opus)
+    ├── commands/                   ← slash commands (symlinked by init.sh)
+    │   └── calibrate.md            (/calibrate — telemetry calibration report)
     ├── agent-memory/               ← per-agent persistent memory
     │   ├── _shared/
     │   │   └── cross_agent_findings.md
     │   ├── idea/
-    │   ├── groomer/         (created on first write)
+    │   ├── groomer/                (pre-seeded with .gitkeep)
     │   ├── architect/
-    │   ├── executor/        (created on first write)
+    │   ├── executor/               (pre-seeded with .gitkeep)
+    │   ├── reviewer/
     │   └── orchestrator/
     │       └── routing_observations.md
     ├── knowledgebase/
     │   └── agent_critique.md       ← deep-critique knowledgebase
-    ├── workspace/                  ← per-session runtime state
+    ├── workspace/                  ← per-session runtime state (gitignored)
     │   ├── project_plan.md         (created by @idea/@architect)
     │   └── loop_state.json         (created by orchestrator)
     ├── settings.json               ← hooks
-    └── settings.local.json         ← user-scoped settings
+    └── settings.local.json         ← user-scoped settings (gitignored)
 ```
 
 **State purity:** `.claude/workspace/` is treated as scratch — the `SessionStart` hook wipes `project_plan.md`, the fallback `.claude/project_plan.md`, and `loop_state.json` on `startup` and `clear` events. Persistence lives in `agent-memory/`.
@@ -326,7 +335,8 @@ See `CLAUDE.md` sections **Known issues & workarounds** and **Deferred items** f
 
 - **Agent-prompt cache:** edits to `.claude/agents/*.md` do not take effect until session restart. Version stamps at the bottom of each agent file mark the last review date.
 - **Stale plan defense:** the `SessionStart` hook now wipes both candidate plan paths plus `loop_state.json`. The orchestrator additionally does a positive-confirmation Read after `@idea` returns.
-- **Deferred (intentionally not built yet):** pipeline test harness, `/calibrate` skill, `@editor` agent for prose, description-splitting investigation, pre-spawn agent-hash check.
+- **Deferred (intentionally not built yet):** pipeline test harness, `@editor` agent for prose, description-splitting investigation, pre-spawn agent-hash check.
+- **Shipped:** `/calibrate` skill (`commands/calibrate.md`) — reads `.claude/orchestrator_telemetry.jsonl` and reports tier distribution, estimate accuracy, routing signal rate, and threshold recommendations.
 
 ---
 
