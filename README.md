@@ -12,7 +12,7 @@ A 5-agent pipeline wired into your Claude Code session via a git submodule. You 
 
 ```mermaid
 flowchart LR
-    U([User]) --> O{Orchestrator<br/>sonnet}
+    U([User]) --> O{Orchestrator<br/>your model}
     O -- Tier 1: trivial --> A1[Direct edit]
     O -- Tier 1: with logic --> EX1["@executor<br/>sonnet"]
     O -- Tier 2: 1-3 inline Qs --> U

@@ -10,7 +10,7 @@ This document explains how the orchestrator and the 5-agent pipeline cooperate. 
 
 ```mermaid
 flowchart LR
-    U([User]) --> O{Orchestrator<br/>sonnet}
+    U([User]) --> O{Orchestrator<br/>your model}
     O -- Tier 1: trivial --> A1[Direct edit]
     O -- Tier 1: with logic --> EX1["@executor<br/>sonnet"]
     O -- Tier 2: 1-3 inline Qs --> U
@@ -41,7 +41,7 @@ ASCII fallback:
                     └───────┬───────┘
                             │
                     ┌───────▼────────┐
-                    │  Orchestrator  │  (sonnet, the main session)
+                    │  Orchestrator  │  (your model — set via /model)
                     │  3-tier router │
                     └───┬────┬────┬──┘
                 Tier 1  │    │    │  Tier 3
@@ -123,7 +123,7 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor U as User
-    participant O as Orchestrator (sonnet)
+    participant O as Orchestrator (your model)
     participant I as @idea (haiku)
     participant G as @groomer (sonnet)
     participant A as @architect (opus)
@@ -319,7 +319,7 @@ Why two matchers but identical commands: `startup` fires on fresh `claude` invoc
 | @architect | opus | Catching design-phase bugs is much cheaper than fixing them after the build. One opus pass < several executor re-runs. |
 | @executor | sonnet | Build cost. Sonnet output is ~5× cheaper than opus per token, and the brief constrains scope tightly enough that opus reasoning depth is overkill. |
 | @reviewer | opus | Review quality depends on (a) catching subtle bugs and (b) communicating them precisely. Opus depth + writing clarity are both load-bearing. |
-| orchestrator | sonnet | Routes everything; needs strong judgment on tier classification and cue parsing. |
+| orchestrator | your choice (set via `/model`) | Routes everything; needs strong judgment on tier classification and cue parsing. Higher-capability models classify ambiguous requests more reliably. |
 
 ---
 
